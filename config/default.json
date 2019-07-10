@@ -1,0 +1,4 @@
+{
+  "mongoConn": "mongodb+srv://gurwinder_07:1234@gurwinderdb-ti2wl.mongodb.net/PasswordManager?retryWrites=true",
+  "jwtSecret": "secret"
+}

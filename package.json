@@ -1,0 +1,36 @@
+{
+  "name": "taskapp",
+  "version": "1.0.0",
+  "description": "Task App",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server",
+    "server": "nodemon server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2019-summer-meanstack/TaskApp.git"
+  },
+  "author": "Nithya",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/2019-summer-meanstack/TaskApp/issues"
+  },
+  "homepage": "https://github.com/2019-summer-meanstack/TaskApp#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "config": "^3.1.0",
+    "cors": "^2.8.5",
+    "cryptr": "^4.0.2",
+    "express": "^4.16.4",
+    "express-validator": "^5.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.5.10",
+    "node-rsa": "^1.0.5",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.0"
+  }
+}

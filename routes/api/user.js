@@ -11,9 +11,12 @@ var bcryptJs = require('bcryptjs');
 // @route    POST api/users
 // @desc     Register user
 // @access   Public
+
+
+
 router.post(
   '/',
-  [
+   [
     check('name', 'Name is required')
       .not()
       .isEmpty(),
@@ -22,11 +25,12 @@ router.post(
       'password',
       'Please enter a password with 6 or more characters'
     ).isLength({ min: 6 })
-  ],
-  async (req, res) => {
+    ],
+    async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      
+      return res.status(400).send("Please Recheck email and password!!");
     }
 
     const { name, email, password , masterPassword} = req.body;
@@ -39,7 +43,9 @@ router.post(
       if (user) {
         return res
           .status(400)
-          .json({ errors: [{ msg: 'User already exists' }] });
+          .send("User already exists with this email");
+
+        
       }
      
       user = new User({
@@ -58,9 +64,9 @@ router.post(
 
       await user.save();
 
-console.log("hashed pass=" + hashedPass);
-      const payload = {
-        user: {
+         console.log("hashed pass=" + hashedPass);
+         const payload = {
+          user: {
           id: user.id,
           name: user.name,
           masterPassword:hashedPass
@@ -74,15 +80,20 @@ console.log("hashed pass=" + hashedPass);
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
-          res.json({ token });
+          res.json({ 
+             "isValid" : true,
+             "token": token,
+        });
         }
-      );
+       );
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
     }
   }
 );
+
+
 
 
 router.get("/",async (req,res)=>{
@@ -105,20 +116,42 @@ router.get("/:email&:pass",async (req,res)=>{
     {
     const isMatch = await bcrypt.compare(req.params.pass, user.password);
     console.log(isMatch)
-
+    
+    
     if(isMatch)
     {
-     res.json(user);
+  
+      const payload = {
+        user: {
+        id: user.id,
+        name: user.name,
+        masterPassword:user.masterPassword
+           
+      } };
+    console.log("is match - patload generateed");
+      jwt.sign(
+      payload,
+      config.get('jwtSecret'),
+      { expiresIn: 360000 },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ 
+           "isValid" : true,
+           "token": token,
+      });
+      }
+     );
+        console.log("if Completed")
     }
     else
     {
-      res.json("Invalid Password" + req.params.password);
+     res.status(401).send("Invalid Caredentials");
     }
   }
 
    else
    {
-     res.json("Invalid User Name");
+    res.status(401).send("Invalid Caredentials");
    }
   }catch(err)
   {

@@ -35,7 +35,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).send({errors:this.toString});
     }
 
     const { email, password } = req.body;
@@ -45,7 +45,7 @@ router.post(
       if (!user) {
         return res
           .status(400)
-          .json({ errors: [{ msg: 'invalid credentials' }] });
+          .send("User Doesn't exists")
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
@@ -53,7 +53,7 @@ router.post(
       if (!isMatch) {
         return res
           .status(400)
-          .json({ errors: [{ msg: 'invalid credentials' }] });
+          .send("Invalid Cardentials");
       }
       //wrapping get user info into payload from mongo
       const payload = {
